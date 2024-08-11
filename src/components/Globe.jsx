@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ComposableMap, Geographies, Geography, Sphere } from "react-simple-maps"
 import { ZoomableGroup } from "react-simple-maps"
 import { Marker } from "react-simple-maps"
+import { scaleLinear, scaleSequential, scaleLog } from 'd3-scale'
 import { Graticule } from "react-simple-maps"
 const  Globe = () => {
   const geoURL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
@@ -9,55 +10,48 @@ const  Globe = () => {
 
   const [counter, setCounter] = useState(-190.0);
   const [counter2, setCounter2] = useState(-53.0);
+  const [coalData, setCoalData] = useState([])
+
+
+  // const colorScale = scaleSequential()
+ const colorScale =  scaleLog([1, 11000], ["red", "blue"])
 
 
   useEffect(() => {
 
-    // try {
-    //   const response = await fetch(url);
-    //   if (!response.ok) {
-    //     throw new Error(`Response status: ${response.status}`);
-    //   }
-  
-    //   const json = await response.json();
-    //   console.log(json);
-    // } catch (error) {
-    //   console.error(error.message);
-    // }
+    // fetch(geoURL)
+    // .then(res => res.json())
+    // .then(res => {
 
-    fetch(geoURL)
+    //   const svgElement = document.getElementById('Bhutan');
+    //   const rect = svgElement.getBoundingClientRect();
+    
+    //   const x = rect.x + window.scrollX;
+    //   const y = rect.y + window.scrollY;
+    
+    //   console.log(`X: ${x}, Y: ${y}`);
+    //   console.log(res)}
+    // )
+
+    const url = "http://127.0.0.1:8000/coal"
+    fetch(url)
     .then(res => res.json())
     .then(res => {
-
-      const svgElement = document.getElementById('Bhutan');
-      const rect = svgElement.getBoundingClientRect();
-    
-      const x = rect.x + window.scrollX;
-      const y = rect.y + window.scrollY;
-    
-      console.log(`X: ${x}, Y: ${y}`);
-      console.log(res)}
-    )
-
-
+        const data = Object.entries(JSON.parse(res['2021'])).map(([key,values]) => ({[key]:values}))
+        setCoalData(data)
+    })
 
   }, [])
-//   useEffect(() => {
-    // const interval = setInterval(() => {
-    //   setCounter(prevCounter => prevCounter + 0.5);
-    //   setCounter2(prevCounter => prevCounter + 0.5);
-    // }, 1); // increment every 1 millisecond
-// 
-    // return () => clearInterval(interval); // clean up the interval on component unmount
-//   }, []);
-
 
   return (
     <div className='overflow-hidden'>
       <ComposableMap
       className='max-h-screen w-full'
       // height={350}
-      projection='geoEquirectangular'
+      projectionConfig={{
+        rotate: [-10, 0, 0],
+        scale: 180
+      }}
       >
           {/* projectionConfig={{
             rotate: [counter, counter2, 10],
@@ -87,16 +81,22 @@ const  Globe = () => {
          />
         <Geographies geography={geoURL}>
           {({ geographies }) =>
-            geographies.map((geo) => (
+            geographies.map((geo) => {
+
+              // console.log(coalData.map(x => console.log(Object.keys(x)[0])))
+              const numFind = coalData.find(x => Object.keys(x)[0].toLowerCase() === geo.properties.name.toLowerCase())
+              const num = numFind ? Object.values(numFind)[0] : 0
+
+             return (
               <Geography
               id={geo.properties.name}
               key={geo.rsmKey}
               geography={geo}
-              fill="#FF5533"
+              fill={num ? colorScale(num) : "#F5F4F6"}
               className={geo.id}
               />
-            ))
-          }
+            )}
+          )}
         </Geographies>
       </ComposableMap>
     </div>
