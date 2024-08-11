@@ -8,7 +8,7 @@ const  Globe = ({eType}) => {
   const geoURL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
 
   const [coalData, setCoalData] = useState([])
-  const [colorScale, setColorScale] = useState(() => scaleLog([1, 200000], ["red", "blue"]));
+  const [colorScale, setColorScale] = useState(() => scaleLog([1, 200000], ["green", "yellow"]));
   // const type = 'Gas'
   
   // const colorScale =  scaleLog([1, 200000], ["red", "blue"])
@@ -21,7 +21,7 @@ const  Globe = ({eType}) => {
     .then(res => {
       console.log(res['2021'])
       setCoalData(res['2021'].Countries)
-      setColorScale(() => scaleLog([res['2021'].Min + 1, res['2021'].Max], ["red", "blue"]))
+      setColorScale(() => scaleLog([res['2021'].Min + 1, res['2021'].Max], ["green", "yellow"]))
       })
   }, [eType])
 

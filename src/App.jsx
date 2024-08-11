@@ -11,7 +11,7 @@ const App = () => {
   return (
     <div className='max-h-screen bg-black overflow-y-hidden'>
       <div className='flex flex-col justify-center items-center'> 
-        <h4 className='text-white text-[2.5rem] font-semibold'>CO2 Emission from {eType} 2021</h4>
+        <h4 className='text-white text-[2.5rem] font-semibold'>2021 CO2 Emission from {eType}</h4>
         <Selector setType={handleType}/>
       </div>
       <Globe eType={eType}/>
