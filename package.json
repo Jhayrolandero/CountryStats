@@ -10,12 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^5.16.7",
     "d3-geo": "^3.1.1",
     "d3-geo-projection": "^4.0.0",
     "d3-scale": "^4.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-simple-maps": "^3.0.0"
+    "react-simple-maps": "^3.0.0",
+    "react-tooltip": "^5.28.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
